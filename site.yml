@@ -2,24 +2,5 @@
 
 - import_playbook: play/server-install.yml
 - import_playbook: play/user.yml
-
-- import_playbook: play/api.yml
-
+- import_playbook: play/info.yml
 - import_playbook: play/microservice-add.yml
-  vars:
-    microservice: cms
-# - import_playbook: play/microservice-add.yml
-  # vars:
-  #   microservice: messenger
-
-# - import_playbook: play/microservice-add.yml
-  # vars:
-  #   microservice: messenger
-
-# - import_playbook: play/microservice-add.yml
-  # vars:
-  #   microservice: messenger
-
-# - import_playbook: play/microservice-add.yml
-  # vars:
-  #   microservice: messenger
