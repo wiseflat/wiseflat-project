@@ -1,0 +1,26 @@
+---
+
+- hosts: server
+  tasks:
+
+    - name: List of your microservices
+      command: /snap/bin/lxc list
+      register: result
+
+    - debug:
+        msg: "{{ result.stdout_lines }}"
+
+- hosts: server
+  vars_prompt:
+    - name: microservice
+      prompt: "microservice name please "
+      private: False
+      when: microservice == undefined
+  tasks:
+
+    - name: Delete microservice
+      command: /snap/bin/lxc delete -f {{ microservice }}
+      # ignore_errors: True
+
+    - debug:
+        msg: Please remove this host from your inventory

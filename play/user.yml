@@ -1,0 +1,128 @@
+---
+
+- name: User variables
+  hosts: localhost
+  gather_facts: yes
+ 
+  pre_tasks:
+
+    - name: pwd
+      command: pwd
+      register: path
+
+    - set_fact: dir={{ path.stdout_lines[0] }}/..
+
+    # - debug:
+    #     msg: "{{ dir }}"
+
+    - pause:
+        prompt: "Set your email address"
+      when: wiseflat_user_email is undefined
+      register: email
+
+    - name: USER | update email to inventory
+      lineinfile:
+        path: "{{ dir }}/env/group_vars/all.yml"
+        regexp: '^wiseflat_user_email:'
+        line: 'wiseflat_user_email: {{ email.user_input }}'
+      when: wiseflat_user_email is undefined
+
+    - pause:
+        prompt: "Set your firstname"
+      when: wiseflat_user_firstname is undefined
+      register: firstname
+
+    - name: USER | update firstname to inventory
+      lineinfile:
+        path: "{{ dir }}/env/group_vars/all.yml"
+        regexp: '^wiseflat_user_firstname:'
+        line: 'wiseflat_user_firstname: {{ firstname.user_input }}'
+      when: wiseflat_user_firstname is undefined
+
+    - pause:
+        prompt: "Set your lastname"
+      when: wiseflat_user_lastname is undefined
+      register: lastname
+
+    - name: USER | update lastname to inventory
+      lineinfile:
+        path: "{{ dir }}/env/group_vars/all.yml"
+        regexp: '^wiseflat_user_lastname:'
+        line: 'wiseflat_user_lastname: {{ lastname.user_input }}'
+      when: wiseflat_user_lastname is undefined
+
+    - pause:
+        prompt: "Set a label for this server"
+      when: wiseflat_user_label is undefined
+      register: label
+
+    - name: USER | update label to inventory
+      lineinfile:
+        path: "{{ dir }}/env/group_vars/all.yml"
+        regexp: '^wiseflat_user_label:'
+        line: 'wiseflat_user_label: {{ label.user_input }}'
+      when: wiseflat_user_label is undefined
+
+    - pause:
+        prompt: "Set your latitude"
+      when: wiseflat_latitude is undefined
+      register: latitude
+
+    - name: USER | update latitude to inventory
+      lineinfile:
+        path: "{{ dir }}/env/group_vars/all.yml"
+        regexp: '^wiseflat_latitude:'
+        line: 'wiseflat_latitude: {{ latitude.user_input }}'
+      when: wiseflat_latitude is undefined
+
+    - pause:
+        prompt: "Set your longitude"
+      when: wiseflat_longitude is undefined
+      register: longitude
+
+    - name: USER | update longitude to inventory
+      lineinfile:
+        path: "{{ dir }}/env/group_vars/all.yml"
+        regexp: '^wiseflat_longitude:'
+        line: 'wiseflat_longitude: {{ longitude.user_input }}'
+      when: wiseflat_longitude is undefined
+
+    - name: USER | update heartbeat to inventory
+      lineinfile:
+        path: "{{ dir }}/env/group_vars/all.yml"
+        regexp: '^wiseflat_heartbeat_status:'
+        line: "wiseflat_heartbeat_status: '1'"
+      when: wiseflat_heartbeat_status is undefined
+
+    - name: USER | update airquality_request to inventory
+      lineinfile:
+        path: "{{ dir }}/env/group_vars/all.yml"
+        regexp: '^wiseflat_airquality_request:'
+        line: 'wiseflat_airquality_request: all'
+      when: wiseflat_airquality_request is undefined
+
+    - name: USER | update suncalc_request to inventory
+      lineinfile:
+        path: "{{ dir }}/env/group_vars/all.yml"
+        regexp: '^wiseflat_suncalc_request:'
+        line: 'wiseflat_suncalc_request: all'
+      when: wiseflat_suncalc_request is undefined
+
+    - name: USER | update weather_request to inventory
+      lineinfile:
+        path: "{{ dir }}/env/group_vars/all.yml"
+        regexp: '^wiseflat_weather_request:'
+        line: 'wiseflat_weather_request: all'
+      when: wiseflat_weather_request is undefined
+
+    - name: USER | update cron to inventory
+      lineinfile:
+        path: "{{ dir }}/env/group_vars/all.yml"
+        regexp: '^wiseflat_cron:'
+        line: 'wiseflat_cron: []'
+      when: wiseflat_cron is undefined
+
+
+- import_playbook: tasks/api-user-create.yml  
+- import_playbook: tasks/api-user-update.yml
+- import_playbook: tasks/api-user-info.yml

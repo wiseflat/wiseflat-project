@@ -1,0 +1,19 @@
+---
+
+- hosts: localhost
+  vars:
+    body:
+      token: "{{ wiseflat_user_token }}"
+
+  tasks:
+
+    - uri:
+        url: "https://api.wiseflat.com/microservice/list"
+        validate_certs: False
+        method: POST
+        body: ' {{ body | to_json}}'
+        body_format: json
+      register: result
+
+    - debug:
+        msg: "{{ result.json }}"

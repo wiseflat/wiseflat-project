@@ -1,0 +1,41 @@
+---
+
+- hosts: server
+  tasks:
+
+    - name: List of your microservices
+      command: /snap/bin/lxc list
+      register: result
+
+    - debug:
+        msg: "{{ result.stdout_lines }}"
+        
+- hosts: server
+  vars_prompt:
+    - name: microservice
+      prompt: "microservice name please "
+      private: False
+      when: microservice == undefined
+  tasks:
+
+    - name: Stop microservice
+      command: /snap/bin/lxc stop {{ microservice }}
+      ignore_errors: True
+
+    - name: Publish lxc container as an image
+      command: /snap/bin/lxc publish {{ microservice }} --alias {{ microservice }}
+
+    - name: Export lxc image
+      command: /snap/bin/lxc image export {{ microservice }} {{ microservice }}
+
+    - name: Delete lxc image
+      command: /snap/bin/lxc image delete {{ microservice }}
+      ignore_errors: True
+
+    - name: Start lxc container
+      command: /snap/bin/lxc start {{ microservice }}
+
+    - name: fetch image
+      fetch: src=/home/{{ ansible_ssh_user }}/{{ microservice }}.tar.gz dest=../tmp/ flat=yes
+
+

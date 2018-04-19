@@ -1,0 +1,15 @@
+---
+- hosts: server
+  vars:
+   body:
+     token: "{{ wiseflat_user_token }}"
+  tasks:
+    - uri:
+        url: https://api.wiseflat.com/heartbeat/info
+        validate_certs: False
+        method: POST
+        body: ' {{ body | to_json}}'
+        body_format: json
+      register: result
+    - debug:
+        msg: "{{ result.json }}"

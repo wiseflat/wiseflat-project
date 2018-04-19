@@ -1,0 +1,30 @@
+---
+
+- block:
+
+    - name: Check if a reboot is required
+      register: file
+      stat: path=/home/{{ ansible_ssh_user }}/.noreboot get_md5=no
+
+    - name: Create noreboot file
+      file:
+        path: /home/{{ ansible_ssh_user }}/.noreboot
+        state: touch
+      when: file.stat.exists is defined and file.stat.exists == false
+
+    - name: Reboot system
+      shell: sleep 2 && shutdown -r now "Ansible reboot"
+      become: true
+      async: 1
+      poll: 0
+      ignore_errors: true
+      when: file.stat.exists is defined and file.stat.exists == false
+
+    - name: sleep for 30 seconds and continue with play
+      wait_for: timeout=30
+      delegate_to: localhost
+      when: file.stat.exists is defined and file.stat.exists == false
+
+    - name: Pause until you can set up lxd init
+      pause:
+      when: file.stat.exists is defined and file.stat.exists == false

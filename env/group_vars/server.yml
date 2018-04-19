@@ -1,0 +1,23 @@
+---
+
+common_package_to_install:
+  - htop
+  - vim
+  - tmux
+  - unattended-upgrades 
+  - aptitude
+  - git
+  - snapd
+  - ntp
+  - jq
+
+common_package_to_remove: []
+
+common_timezone: Europe/Paris
+
+lxd_daemon_network_adress: 127.0.0.1
+lxd_daemon_port: 8443
+lxd_storage_backend: dir
+lxd_storage_pool: default
+lxd_trust_password: wiseflat
+

@@ -1,0 +1,97 @@
+---
+
+- hosts: server
+  tasks:
+
+    # common tasks
+
+    - name: set timezone to Europe/Paris
+      become: true
+      timezone:
+        name: "{{ common_timezone }}"
+
+    - name: APT | update sources.list
+      become: true
+      replace:
+        path: /etc/apt/sources.list
+        regexp: '#deb-src'
+        replace: 'deb-src'
+
+    - name: APT | remove unused packages
+      become: true
+      apt: 
+        name: "{{ item }}"
+        state: absent
+      with_items: "{{ common_package_to_remove }}"
+
+    - name: APT | install useful packages
+      become: true
+      apt:
+        name: "{{ item }}"
+        state: present
+        update_cache: true
+        cache_valid_time: 3600
+      with_items: "{{ common_package_to_install }}"
+
+    # - name: Adjust APT update intervals
+    #   copy: src=apt_periodic dest=/etc/apt/apt.conf.d/10periodic
+
+    # pc network
+
+    - name: NETWORK | network
+      become: true
+      template:
+        src: network/interfaces.j2
+        dest: /etc/network/interfaces
+        owner: root
+        group: root
+        mode: 0644
+        
+    - include_tasks: tasks/noreboot.yml
+
+    # lxd tasks
+
+    - name: LXD | install lxd via snap
+      become: true
+      command: snap install lxd
+      # no_log: True
+
+    # - name: You need to intall lxc with snap manually... It doesn't with ansible. I don't know why yet
+    #   pause:
+
+    - name: sleep for 30 seconds until snapd started correctly
+      wait_for: timeout=30
+      delegate_to: localhost
+
+    - name: USER | Appending the group 'lxd' to the user pi
+      become: true
+      user:
+        name: pi
+        groups: lxd
+        append: yes
+
+    - name: LXD | Init LXD daemon
+      command: '/snap/bin/lxd init --auto --network-address {{ lxd_daemon_network_adress }} --network-port {{ lxd_daemon_port }} --trust-password {{ lxd_trust_password }}'
+
+    - name: LXD | add local daemon as a remote server
+      command: /snap/bin/lxc remote add {{ ansible_hostname }} 127.0.0.1 --password={{ lxd_trust_password }} --accept-certificate=true 
+      ignore_errors: True
+
+    - name: lxd_profile | Update profile default
+      tags: lxd_profile
+      lxd_profile:
+        name: default
+        state: present
+        cert_file: "/home/{{ansible_ssh_user}}/snap/lxd/current/.config/lxc/client.crt"
+        key_file: "/home/{{ansible_ssh_user}}/snap/lxd/current/.config/lxc/client.key"
+        url: "https://127.0.0.1:8443"
+        description: default profile
+        devices:
+          root:
+            path: /
+            pool: default
+            type: disk
+          eth0:
+            nictype: macvlan
+            parent: br0
+            type: nic

@@ -1,0 +1,7 @@
+node_modules
+._DS*
+*.retry
+roles
+env/group_vars/all.yml
+tmp
+ssh/id_rsa*

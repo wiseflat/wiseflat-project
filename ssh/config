@@ -1,0 +1,13 @@
+Host home-wiseflat
+    User pi
+
+Host home-* !home-wiseflat
+    User ubuntu
+
+Host *
+    HostName %h
+    ForwardAgent yes
+    StrictHostKeyChecking no
+    UserKnownHostsFile /dev/null
+    IdentityFile ssh/id_rsa
+    ServerAliveInterval 30

@@ -1,0 +1,70 @@
+---
+
+- hosts: server
+  tasks:
+
+    - name: pwd
+      command: pwd
+      register: path
+      delegate_to: localhost
+
+    - set_fact: dir={{ path.stdout_lines[0] }}/../..
+
+    # - debug:
+    #     msg: "{{ dir }}"
+
+    - name: USER | get personnal token
+      uri:
+        url: "https://api.wiseflat.com/user/key"
+        validate_certs: False
+        method: GET
+        return_content: yes
+        status_code: 200
+        body_format: json
+      register: result
+      when: wiseflat_user_token is undefined
+
+    - debug:
+        msg: "{{ result.json }}"
+      when: wiseflat_user_token is undefined
+
+    # - name: fail the play if the previous command did not succeed
+    #   fail:
+    #     msg: "the command failed"
+    #   # when: result.json.status == 'error' or wiseflat_user_token is undefined
+    #   when: wiseflat_user_token is undefined
+
+    - name: USER | update token to inventory
+      lineinfile:
+        path: "{{ dir }}/env/group_vars/all.yml"
+        regexp: '^wiseflat_user_token:'
+        line: 'wiseflat_user_token: {{ result.json.value }}'
+      delegate_to: localhost
+      when: wiseflat_user_token is undefined
+
+    - set_fact: wiseflat_user_token={{ result.json.value }}
+      when: wiseflat_user_token is undefined
+
+- hosts: server
+  vars:
+    body:
+      token: "{{ wiseflat_user_token }}"
+      firstname: "{{ wiseflat_user_firstname }}"
+      lastname: "{{ wiseflat_user_lastname }}"
+      email: "{{ wiseflat_user_email }}"
+      label: "{{ wiseflat_user_label }}"
+  tasks:
+
+    - uri:
+        url: https://api.wiseflat.com/user/update
+        validate_certs: False
+        method: POST
+        body: ' {{ body | to_json}}'
+        body_format: json
+      register: result
+
+    - debug:
+        msg: "{{ result.json }}"
+
+    - name: Wait until you receive your email registration or continue if your account is already activated
+      pause:

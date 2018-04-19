@@ -1,0 +1,9 @@
+---
+
+- import_playbook: tasks/api-user-info.yml
+
+- import_playbook: tasks/api-cron-info.yml
+- import_playbook: tasks/api-heartbeat-info.yml
+
+- import_playbook: tasks/api-microservice-list.yml
+  
