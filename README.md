@@ -51,7 +51,7 @@ $ brew install ansible
 
 ```
 $ cd ~
-$ git clone https://gitlab.wiseflat.com/pub/wiseflat-project.git
+$ git clone https://github.com/wiseflat/wiseflat-project.git
 $ cd wiseflat-project
 ```
 
