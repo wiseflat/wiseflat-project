@@ -20,7 +20,7 @@
       ignore_errors: true
       when: file.stat.exists is defined and file.stat.exists == false
 
-    - name: sleep for 50 seconds and continue with play
+    - name: sleep for 50 seconds
       wait_for: timeout=50
       delegate_to: localhost
       when: file.stat.exists is defined and file.stat.exists == false

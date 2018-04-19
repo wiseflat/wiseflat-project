@@ -15,6 +15,10 @@
     # - debug:
     #     msg: "{{ dir }}"
 
+    - file:
+        path: "{{ dir }}/env/group_vars/all.yml"
+        state: touch
+
     - pause:
         prompt: "Set your email address"
       when: wiseflat_user_email is undefined

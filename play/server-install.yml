@@ -59,8 +59,8 @@
     # - name: You need to intall lxc with snap manually... It doesn't with ansible. I don't know why yet
     #   pause:
 
-    - name: Sleep for 30 seconds until snapd started correctly
-      wait_for: timeout=30
+    - name: Sleep for 60 seconds until snapd started correctly
+      wait_for: timeout=60
       delegate_to: localhost
 
     - name: Append the group 'lxd' to the user pi
