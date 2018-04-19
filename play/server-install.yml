@@ -5,26 +5,26 @@
 
     # common tasks
 
-    - name: set timezone to Europe/Paris
+    - name: Set timezone
       become: true
       timezone:
         name: "{{ common_timezone }}"
 
-    - name: APT | update sources.list
+    - name: Update sources.list
       become: true
       replace:
         path: /etc/apt/sources.list
         regexp: '#deb-src'
         replace: 'deb-src'
 
-    - name: APT | remove unused packages
+    - name: Remove unused packages
       become: true
       apt: 
         name: "{{ item }}"
         state: absent
       with_items: "{{ common_package_to_remove }}"
 
-    - name: APT | install useful packages
+    - name: Install useful packages
       become: true
       apt:
         name: "{{ item }}"
@@ -38,7 +38,7 @@
 
     # pc network
 
-    - name: NETWORK | network
+    - name: Configure network interface
       become: true
       template:
         src: network/interfaces.j2
@@ -51,7 +51,7 @@
 
     # lxd tasks
 
-    - name: LXD | install lxd via snap
+    - name: Install lxd via snap
       become: true
       command: snap install lxd
       # no_log: True
@@ -59,25 +59,25 @@
     # - name: You need to intall lxc with snap manually... It doesn't with ansible. I don't know why yet
     #   pause:
 
-    - name: sleep for 30 seconds until snapd started correctly
+    - name: Sleep for 30 seconds until snapd started correctly
       wait_for: timeout=30
       delegate_to: localhost
 
-    - name: USER | Appending the group 'lxd' to the user pi
+    - name: Append the group 'lxd' to the user pi
       become: true
       user:
         name: pi
         groups: lxd
         append: yes
 
-    - name: LXD | Init LXD daemon
+    - name: Init LXD daemon
       command: '/snap/bin/lxd init --auto --network-address {{ lxd_daemon_network_adress }} --network-port {{ lxd_daemon_port }} --trust-password {{ lxd_trust_password }}'
 
-    - name: LXD | add local daemon as a remote server
+    - name: Add local daemon as a remote server
       command: /snap/bin/lxc remote add {{ ansible_hostname }} 127.0.0.1 --password={{ lxd_trust_password }} --accept-certificate=true 
       ignore_errors: True
 
-    - name: lxd_profile | Update profile default
+    - name: Update default lxd profile
       tags: lxd_profile
       lxd_profile:
         name: default

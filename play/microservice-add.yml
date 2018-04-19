@@ -14,34 +14,34 @@
       label: "{{ microservice }}"
   tasks:
 
-    - name: clean up old downloaded files if exists
+    - name: Clean up
       file:
         path: /tmp/{{ microservice }}.tar.gz
         state: absent
 
-    - name: download microservice
+    - name: Download microservice
       command: curl -X POST -d "token={{ wiseflat_user_token }}" -d "label={{ microservice }}" https://api.wiseflat.com/microservice/download -o /tmp/{{ microservice }}.tar.gz
 
     - name: Delete old lxc image if exists
       command: /snap/bin/lxc image delete {{ microservice }}
       ignore_errors: True
 
-    - name: import microservice to lxd image store
+    - name: Import microservice to lxd image store
       command: /snap/bin/lxc image import /tmp/{{ microservice }}.tar.gz --alias {{ microservice }}
       ignore_errors: True
 
-    - name: clean up downloaded files
+    - name: Clean up
       file:
         path: /tmp/{{ microservice }}.tar.gz
         state: absent
 
-    - name: create microservice
+    - name: Create microservice
       command: /snap/bin/lxc init {{ microservice }} home-{{ microservice }}
       # ignore_errors: True
 
-    - name: start microservice
+    - name: Start microservice
       command: /snap/bin/lxc start home-{{ microservice }}
       # ignore_errors: True
 
-    - name: copy your authorized_keys to home-{{ microservice }}
+    - name: Copy your authorized_keys to home-{{ microservice }}
       command: lxc file push ~/.ssh/authorized_keys home-{{ microservice }}/home/ubuntu/.ssh/authorized_keys

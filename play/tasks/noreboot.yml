@@ -20,11 +20,11 @@
       ignore_errors: true
       when: file.stat.exists is defined and file.stat.exists == false
 
-    - name: sleep for 30 seconds and continue with play
-      wait_for: timeout=30
+    - name: sleep for 50 seconds and continue with play
+      wait_for: timeout=50
       delegate_to: localhost
       when: file.stat.exists is defined and file.stat.exists == false
 
-    - name: Pause until you can set up lxd init
+    - name: Be sure your raspberry pi is available before continue
       pause:
       when: file.stat.exists is defined and file.stat.exists == false
