@@ -1,5 +1,6 @@
 node_modules
 ._DS*
+.DS_Store
 *.retry
 roles
 env/group_vars/all.yml
