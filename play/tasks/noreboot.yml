@@ -12,7 +12,7 @@
         state: touch
       when: file.stat.exists is defined and file.stat.exists == false
 
-    - name: Reboot system
+    - name: Reboot
       shell: sleep 2 && shutdown -r now "Ansible reboot"
       become: true
       async: 1
@@ -20,8 +20,8 @@
       ignore_errors: true
       when: file.stat.exists is defined and file.stat.exists == false
 
-    - name: sleep for 50 seconds
-      wait_for: timeout=50
+    - name: sleep for 60 seconds
+      wait_for: timeout=60
       delegate_to: localhost
       when: file.stat.exists is defined and file.stat.exists == false
 

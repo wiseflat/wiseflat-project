@@ -1,6 +1,7 @@
 ---
 
 - hosts: server
+  gather_facts: yes
   tasks:
 
     - name: pwd

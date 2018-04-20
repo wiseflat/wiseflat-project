@@ -1,6 +1,7 @@
 ---
 
 - hosts: server
+  gather_facts: yes
   vars:
     body:
       token: "{{ wiseflat_user_token }}"

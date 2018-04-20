@@ -46,8 +46,6 @@
         owner: root
         group: root
         mode: 0644
-        
-    - include_tasks: tasks/noreboot.yml
 
     # lxd tasks
 
@@ -59,6 +57,8 @@
     # - name: You need to intall lxc with snap manually... It doesn't with ansible. I don't know why yet
     #   pause:
 
+    
+
     - name: Sleep for 60 seconds until snapd started correctly
       wait_for: timeout=60
       delegate_to: localhost
@@ -69,6 +69,8 @@
         name: pi
         groups: lxd
         append: yes
+
+    - include_tasks: tasks/noreboot.yml
 
     - name: Init LXD daemon
       command: '/snap/bin/lxd init --auto --network-address {{ lxd_daemon_network_adress }} --network-port {{ lxd_daemon_port }} --trust-password {{ lxd_trust_password }}'

@@ -43,5 +43,9 @@
       command: /snap/bin/lxc start home-{{ microservice }}
       # ignore_errors: True
 
+    - name: Sleep 20 seconds
+      wait_for: timeout=20
+      delegate_to: localhost
+
     - name: Copy your authorized_keys to home-{{ microservice }}
-      command: lxc file push ~/.ssh/authorized_keys home-{{ microservice }}/home/ubuntu/.ssh/authorized_keys
+      command: /snap/bin/lxc file push ~/.ssh/authorized_keys home-{{ microservice }}/home/ubuntu/.ssh/authorized_keys
