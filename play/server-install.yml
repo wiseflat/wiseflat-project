@@ -59,7 +59,7 @@
 
     
 
-    - name: Sleep for 60 seconds until snapd started correctly
+    - name: Wait few seconds for snapd
       wait_for: timeout=60
       delegate_to: localhost
 

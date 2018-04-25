@@ -13,7 +13,9 @@
         body: ' {{ body | to_json}}'
         body_format: json
       register: result
-    - debug:
+
+    - name: api-heartbeat-update result
+      debug:
         msg: "{{ result.json }}"
 
     - name: "add or update heartbeat crontab"

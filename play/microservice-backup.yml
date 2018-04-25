@@ -18,6 +18,19 @@
       when: microservice == undefined
   tasks:
 
+    - name: pwd
+      command: pwd
+      register: path
+      delegate_to: localhost
+
+    - set_fact: dir={{ path.stdout_lines[0] }}/..
+
+    - name: Create backup directory
+      file:
+        path: "{{ dir }}/backup"
+        state: directory
+      delegate_to: localhost
+
     - name: Stop microservice
       command: /snap/bin/lxc stop {{ microservice }}
       ignore_errors: True
@@ -36,6 +49,6 @@
       command: /snap/bin/lxc start {{ microservice }}
 
     - name: fetch image
-      fetch: src=/home/{{ ansible_ssh_user }}/{{ microservice }}.tar.gz dest=../tmp/ flat=yes
+      fetch: src=/home/{{ ansible_ssh_user }}/{{ microservice }}.tar.gz dest={{ dir }}/backup/ flat=yes
 
 

@@ -15,5 +15,6 @@
         body_format: json
       register: result
 
-    - debug:
+    - name: api-cron-info result
+      debug:
         msg: "{{ result.json }}"

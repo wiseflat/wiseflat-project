@@ -25,7 +25,8 @@
       register: result
       when: wiseflat_user_token is undefined
 
-    - debug:
+    - name: api-user-create result
+      debug:
         msg: "{{ result.json }}"
       when: wiseflat_user_token is undefined
 
@@ -64,7 +65,8 @@
         body_format: json
       register: result
 
-    - debug:
+    - name: api-user-update result
+      debug:
         msg: "{{ result.json }}"
 
     - name: Wait until you receive your email registration or continue if your account is already activated

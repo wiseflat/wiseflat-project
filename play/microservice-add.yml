@@ -23,7 +23,7 @@
       command: curl -X POST -d "token={{ wiseflat_user_token }}" -d "label={{ microservice }}" https://api.wiseflat.com/microservice/download -o /tmp/{{ microservice }}.tar.gz
 
     - name: Delete old lxc image if exists
-      command: /snap/bin/lxc image delete {{ microservice }}
+      command: /snap/bin/lxc image delete {{ microservice }} 2>&1 >/dev/null
       ignore_errors: True
 
     - name: Import microservice to lxd image store

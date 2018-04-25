@@ -25,6 +25,6 @@
       delegate_to: localhost
       when: file.stat.exists is defined and file.stat.exists == false
 
-    - name: Be sure your raspberry pi is available before continue
-      pause:
-      when: file.stat.exists is defined and file.stat.exists == false
+    # - name: Be sure your raspberry pi is available before continue
+    #   pause:
+    #   when: file.stat.exists is defined and file.stat.exists == false

@@ -11,5 +11,7 @@
         body: ' {{ body | to_json}}'
         body_format: json
       register: result
-    - debug:
+
+    - name: api-heartbeat-info result
+      debug:
         msg: "{{ result.json }}"

@@ -19,5 +19,7 @@
         body_format: json
       register: result
 
+    - name: api-user-update result
+      debug:
     - debug:
         msg: "{{ result.json }}"

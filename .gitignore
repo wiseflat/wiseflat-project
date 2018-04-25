@@ -6,3 +6,4 @@ roles
 env/group_vars/all.yml
 tmp
 ssh/id_rsa*
+backup
