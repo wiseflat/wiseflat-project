@@ -1,4 +1,4 @@
-![Basic LAN](/img/logo.png "Logo")
+![Basic LAN](https://wiki.wiseflat.com/img/logo.png "Logo")
 
 <h1>A toolbox for your IT</h1> 
 
