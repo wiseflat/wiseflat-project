@@ -582,7 +582,7 @@ $ Ansible-playbook server-install.yml
 
 Unattended upgrades are enabled in our pre-installed LXC images.
 
-Your apps and their data will not be updated. You need to follow the official documentation of the application installed
+Your apps and their data will not be updated. You need to follow the official documentation of the application installed on your Linux container.
 
 ## Microservices
 
