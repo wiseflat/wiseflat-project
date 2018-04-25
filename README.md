@@ -578,11 +578,13 @@ Just run the server-install.yml playbook another time.
 $ Ansible-playbook server-install.yml
 ``` 
 
+
 ### Microservice updates
 
 Unattended upgrades are enabled in our pre-installed LXC images.
 
 Your apps and their data will not be updated. You need to follow the official documentation of the application installed on your Linux container.
+
 
 ## Microservices
 
@@ -855,7 +857,7 @@ ok: [home-wiseflat] => {
         "+----------+---------+------------------------+------+------------+-----------+",
         "|   NAME   |  STATE  |          IPV4          | IPV6 |    TYPE    | SNAPSHOTS |",
         "+----------+---------+------------------------+------+------------+-----------+",
-        "| home-cms | RUNNING | 192.168.201.192 (eth0) |      | PERSISTENT | 0         |",
+        "| home-cms | RUNNING | 192.168.1.192 (eth0)   |      | PERSISTENT | 0         |",
         "+----------+---------+------------------------+------+------------+-----------+"
     ]
 }
