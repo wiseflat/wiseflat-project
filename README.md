@@ -578,13 +578,11 @@ Just run the server-install.yml playbook another time.
 $ Ansible-playbook server-install.yml
 ``` 
 
-
 ### Microservice updates
 
 Unattended upgrades are enabled in our pre-installed LXC images.
 
-Your apps and their data will not be updated. You need to follow the official documentation.
-
+Your apps and their data will not be updated. You need to follow the official documentation of the application installed
 
 ## Microservices
 
