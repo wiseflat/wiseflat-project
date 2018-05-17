@@ -54,11 +54,6 @@
       command: snap install lxd
       # no_log: True
 
-    # - name: You need to intall lxc with snap manually... It doesn't with ansible. I don't know why yet
-    #   pause:
-
-    
-
     - name: Wait few seconds for snapd
       wait_for: timeout=60
       delegate_to: localhost
@@ -69,6 +64,13 @@
         name: pi
         groups: lxd
         append: yes
+
+    # - name: disable libarmmem
+    #   become: true
+    #   lineinfile:
+    #     path: /etc/ld.so.preload
+    #     regexp: '^/usr/lib/arm-linux-gnueabihf/libarmmem.so'
+    #     line: '#/usr/lib/arm-linux-gnueabihf/libarmmem.so'
 
     - include_tasks: tasks/noreboot.yml
 

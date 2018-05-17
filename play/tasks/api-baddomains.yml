@@ -1,0 +1,18 @@
+- hosts: home-dnsmasq
+  become: true
+  tasks:
+
+    - name: Baddomain - Get all domains
+      get_url:
+        url: https://api.wiseflat.com/baddomain/list
+        dest: /etc/blacklist.dnsmasq
+        mode: 0644
+
+    - name: remove whitelist domains from blacklist.dnsmasq
+      shell: sed -i '/{{ item }}/d' /etc/blacklist.dnsmasq
+      with_items: "{{ api_baddomains_whitelist }}"
+        
+    - name: Reload dnsmasq service
+      service:
+        name: dnsmasq
+        state: reloaded
